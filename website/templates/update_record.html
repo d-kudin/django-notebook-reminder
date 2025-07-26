@@ -1,0 +1,48 @@
+<!--website/templates/update_record.html-->
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col-md-8 offset-md-2">
+  <h1>Edit Note</h1>
+  <br />
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+      {{ form.title.label_tag }} {{ form.title }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.content.label_tag }} {{ form.content }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.deadline.label_tag }} {{ form.deadline }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.reminder.label_tag }} {{ form.reminder }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.status_color.label_tag }} {{ form.status_color }}
+    </div>
+
+    <div class="mb-3 form-check">
+      {{ form.is_priority }} {{ form.is_priority.label_tag }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.category.label_tag }} {{ form.category }}
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+  </form>
+</div>
+
+{% endblock %}

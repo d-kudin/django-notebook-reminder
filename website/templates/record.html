@@ -1,0 +1,38 @@
+<!--website/templates/record.html-->
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+  <div class="card-header">
+    <h3>{{ customer_record.title }}</h3>
+  </div>
+  <div class="card-body">
+
+    <p><strong>Content:</strong><br />{{ customer_record.content|linebreaks }}</p>
+
+    {% if customer_record.deadline %}
+      <p><strong>Deadline:</strong> {{ customer_record.deadline }}</p>
+    {% endif %}
+
+    {% if customer_record.reminder %}
+      <p><strong>Reminder:</strong> {{ customer_record.reminder }}</p>
+    {% endif %}
+
+    <p><strong>Status:</strong> {{ customer_record.get_status_color_display }}</p>
+    <p><strong>Priority:</strong> {% if customer_record.is_priority %}Tak{% else %}—{% endif %}</p>
+
+    {% if customer_record.category %}
+      <p><strong>Category:</strong> {{ customer_record.category.name }}</p>
+    {% endif %}
+
+    <p><strong>Created:</strong> {{ customer_record.created_at|date:"Y-m-d H:i" }}</p>
+  </div>
+</div>
+
+<br />
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<a href="{% url 'delete_record' customer_record.id %}" class="btn btn-danger">Delete</a>
+<a href="{% url 'update_record' customer_record.id %}" class="btn btn-primary">Edit</a>
+
+{% endblock %}

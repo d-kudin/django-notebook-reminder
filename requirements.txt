@@ -1,0 +1,17 @@
+asgiref
+certifi
+charset-normalizer
+Django
+idna
+iniconfig
+mysql-connector-python
+packaging
+pluggy
+pytest
+pytest-django
+requests
+sqlparse
+typing_extensions
+tzdata
+urllib3
+python-dotenv

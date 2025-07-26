@@ -1,0 +1,178 @@
+<!--website/templates/home.html-->
+
+{% extends 'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<h1>Your Notes</h1>
+<br />
+
+<form method="GET" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label for="date" class="form-label">Filter by date</label>
+    <input type="date" name="date" id="date" class="form-control" value="{{ request.GET.date }}">
+  </div>
+  <div class="col-md-4">
+    <label for="category" class="form-label">Filter by category</label>
+    <select name="category" id="category" class="form-select">
+      <option value="">All</option>
+      {% for cat in categories %}
+        <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+          {{ cat.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4 align-self-end">
+    <button type="submit" class="btn btn-outline-primary">Filter</button>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">Clear</a>
+  </div>
+</form>
+
+<!-- REMINDERS -->
+
+{% if reminders %}
+<div class="alert alert-info" role="alert">
+  <h5>Reminders:</h5>
+  <ul>
+    {% for record in reminders %}
+      <li>
+        <a href="{% url 'record' record.id %}">{{ record.title }}</a> - reminder at {{ record.reminder|date:"Y-m-d H:i" }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<!-- RECORD TABLE -->
+<table class="table table-hover table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Deadline</th>
+      <th>Created</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in records %}
+      <tr class="
+        {% if record.status_color == 'green' %}table-success
+        {% elif record.status_color == 'yellow' %}table-warning
+        {% elif record.status_color == 'red' %}table-danger
+        {% elif record.status_color == 'gray' %}table-secondary
+        {% else %}table-light
+        {% endif %}
+      ">
+        <td>
+          {% if record.is_completed %}
+            <s><a href="{% url 'record' record.id %}">{{ record.title }}</a></s>
+          {% else %}
+            <a href="{% url 'record' record.id %}">{{ record.title }}</a>
+          {% endif %}
+        </td>
+        <td>{{ record.category.name|default:"-" }}</td>
+        <td>
+          {% if record.status_color == 'green' %}
+            <span class="badge bg-success">{{ record.get_status_color_display }}</span>
+          {% elif record.status_color == 'yellow' %}
+            <span class="badge bg-warning text-dark">{{ record.get_status_color_display }}</span>
+          {% elif record.status_color == 'red' %}
+            <span class="badge bg-danger">{{ record.get_status_color_display }}</span>
+          {% elif record.status_color == 'blue' %}
+            <span class="badge bg-primary">{{ record.get_status_color_display }}</span>
+          {% else %}
+            <span class="badge bg-secondary">{{ record.get_status_color_display }}</span>
+          {% endif %}
+        </td>
+        <td>{% if record.is_priority %}<span class="badge bg-danger">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</td>
+        <td>{{ record.deadline|default:"—" }}</td>
+        <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+        <td>
+          <a href="{% url 'update_record' record.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'delete_record' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          {% if not record.is_completed %}
+            <a href="{% url 'complete_record' record.id %}" class="btn btn-sm btn-outline-success">Complete</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7">No notes to display.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    {% if records.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.date %}date={{ request.GET.date }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}page={{ records.previous_page_number }}">« Previous</a>
+      </li>
+    {% endif %}
+
+    {% for num in records.paginator.page_range %}
+      {% if records.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?{% if request.GET.date %}date={{ request.GET.date }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if records.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if request.GET.date %}date={{ request.GET.date }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}page={{ records.next_page_number }}">Next »</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<hr />
+
+<!-- NEWS SECTION -->
+<h2>News</h2>
+{% if news %}
+  <div class="row">
+    {% for article in news|slice:":4" %}
+      <div class="col-md-6 mb-3">
+        <div class="card h-100">
+          {% if article.urlToImage %}
+            <img src="{{ article.urlToImage }}" class="card-img-top" alt="obraz">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.description }}</p>
+            <a href="{{ article.url }}" target="_blank" class="btn btn-sm btn-primary">Read more</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No news articles available.</p>
+{% endif %}
+
+{% else %}
+
+<!-- LOGIN PANEL -->
+<div class="col-md-6 offset-md-3">
+  <h1>Login</h1>
+  <br />
+  <form method="POST" action="{% url 'home' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <input type="text" class="form-control" name="username" placeholder="Username" required>
+    </div>
+    <div class="mb-3">
+      <input type="password" class="form-control" name="password" placeholder="Password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+</div>
+
+{% endif %}
+
+{% endblock %}

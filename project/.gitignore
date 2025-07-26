@@ -1,0 +1,52 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Django-specific files
+db.sqlite3
+*.log
+*.pot
+*.mo
+media/
+staticfiles/
+
+# pytest / test tools
+htmlcov/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.cache/
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+.pytype/
+
+# IDE / Editor configs
+.vscode/
+
+# User/utility files
+Login_haslo_superuser.txt
+
+# SQLite backup
+*.sqlite3-journal
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+desktop.ini
