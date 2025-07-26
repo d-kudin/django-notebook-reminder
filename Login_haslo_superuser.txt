@@ -1,7 +1,0 @@
-SUPERUSER (do stron http://127.0.0.1:8000/ oraz http://127.0.0.1:8000/admin):
-
-Login: admin
-e-mail: aptmain@gmail.com
-hasło: MojeSilneHaslo123!
-
-
