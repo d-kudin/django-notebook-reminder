@@ -42,9 +42,10 @@ Both features are integrated directly into the homepage and styled to match the 
 
 ## Local Setup Instructions
 
-### 1. Unpack and Open the Project
+### 1. Download and Open the Project
 ```
-Download and unzip the project archive. Open the extracted folder in your preferred IDE (e.g., Visual Studio Code).
+Click the green "Code" button above, then choose "Download ZIP" to download the entire repository.
+Unzip the archive and open the extracted folder in your preferred IDE (e.g., Visual Studio Code).
 ```
 
 ### 2. Create and Activate a Virtual Environment
