@@ -112,5 +112,10 @@ Sensitive data like API keys must be stored in .env
 
 If badges or weather/news display incorrectly, verify your API keys and internet connection
 
+**FRONTEND:**
+
 <img width="1903" height="982" alt="image" src="https://github.com/user-attachments/assets/24eebc5a-462b-4496-8f93-1e437ca5ed60" />
 
+**BACKEND:**
+
+<img width="1898" height="906" alt="image" src="https://github.com/user-attachments/assets/9bfe82db-a66d-44be-83ca-0f2bee8bb7b5" />
